@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import myPic from "../assets/mypic.jpeg";
 
-/* ---------- SCALE LOGIC ---------- */
+/* ---------- CONSTANTS ---------- */
 const MID_SCALE = 0.88;
 const SIDE_SCALE = MID_SCALE * 0.88;
 const OUTER_SCALE = SIDE_SCALE * 0.864;
-
 const SLOT = 380;
+const AUTO_DELAY = 8000;
+const TRANSITION_MS = 900;
 
-/* ---------- CARD DATA ---------- */
-const cardsData = [
+/* ---------- CARD DATA (DUPLICATED FOR ILLUSION) ---------- */
+const baseCards = [
   {
     title: "Blud",
     subtitle: "Blood Donation Website",
@@ -17,6 +18,7 @@ const cardsData = [
     type: "Individual",
     time: "4 Months",
     image: myPic,
+    link: "https://example.com/blud",
   },
   {
     title: "Stride",
@@ -25,6 +27,7 @@ const cardsData = [
     type: "Startup",
     time: "6 Months",
     image: myPic,
+    link: "https://example.com/stride",
   },
   {
     title: "Locsy",
@@ -33,6 +36,7 @@ const cardsData = [
     type: "Product",
     time: "5 Months",
     image: myPic,
+    link: "https://example.com/locsy",
   },
   {
     title: "LegalLens",
@@ -41,6 +45,7 @@ const cardsData = [
     type: "AI Tool",
     time: "4 Months",
     image: myPic,
+    link: "https://example.com/legallens",
   },
   {
     title: "Touch Grass",
@@ -49,51 +54,58 @@ const cardsData = [
     type: "Mobile App",
     time: "3 Months",
     image: myPic,
+    link: "https://example.com/touchgrass",
   },
 ];
 
+const cardsData = [...baseCards, ...baseCards, ...baseCards];
+
+/* ---------- BUFFERED LIST ---------- */
+const buffer = 2;
+const bufferedCards = [
+  ...cardsData.slice(-buffer),
+  ...cardsData,
+  ...cardsData.slice(0, buffer),
+];
+
 export default function WorkHistory() {
-  const [cards, setCards] = useState(cardsData);
+  const [index, setIndex] = useState(buffer);
   const [dragX, setDragX] = useState(0);
 
   const dragging = useRef(false);
   const startX = useRef(0);
   const autoRef = useRef(null);
-  const animating = useRef(false); // ✅ FIX
+  const snapping = useRef(false);
 
-  /* ---------- AUTO LOOP ---------- */
   useEffect(() => {
-    autoRef.current = setInterval(next, 8000);
+    autoRef.current = setInterval(() => move(1), AUTO_DELAY);
     return () => clearInterval(autoRef.current);
   }, []);
 
-  const next = () => {
-    if (animating.current) return;
-    animating.current = true;
+  useEffect(() => {
+    if (snapping.current) return;
 
-    setCards((p) => {
-      const c = [...p];
-      c.push(c.shift());
-      return c;
-    });
+    if (index === bufferedCards.length - buffer) {
+      snapping.current = true;
+      setTimeout(() => {
+        setIndex(buffer);
+        snapping.current = false;
+      }, TRANSITION_MS);
+    }
 
-    setTimeout(() => (animating.current = false), 300);
+    if (index === buffer - 1) {
+      snapping.current = true;
+      setTimeout(() => {
+        setIndex(bufferedCards.length - buffer - 1);
+        snapping.current = false;
+      }, TRANSITION_MS);
+    }
+  }, [index]);
+
+  const move = (dir) => {
+    setIndex((i) => i + dir);
   };
 
-  const prev = () => {
-    if (animating.current) return;
-    animating.current = true;
-
-    setCards((p) => {
-      const c = [...p];
-      c.unshift(c.pop());
-      return c;
-    });
-
-    setTimeout(() => (animating.current = false), 300);
-  };
-
-  /* ---------- DRAG ---------- */
   const onDown = (e) => {
     dragging.current = true;
     startX.current = e.clientX || e.touches[0].clientX;
@@ -110,17 +122,17 @@ export default function WorkHistory() {
     if (!dragging.current) return;
     dragging.current = false;
 
-    if (dragX < -SLOT / 4) next();
-    else if (dragX > SLOT / 4) prev();
+    if (dragX < -SLOT / 4) move(1);
+    if (dragX > SLOT / 4) move(-1);
 
     setDragX(0);
-    autoRef.current = setInterval(next, 8000);
+    autoRef.current = setInterval(() => move(1), AUTO_DELAY);
   };
 
   return (
     <section style={styles.section}>
-      <div style={styles.container} className="wh-container">
-        <div style={styles.header} className="wh-header">
+      <div style={styles.container}>
+        <div style={styles.header}>
           <h2 style={styles.heading}>Projects</h2>
           <p style={styles.subheading}>
             Selected work across product, systems, and experimentation
@@ -137,32 +149,28 @@ export default function WorkHistory() {
           onTouchMove={onMove}
           onTouchEnd={onUp}
         >
-          {cards.map((card, i) => {
-            const distance = i - 2;
+          {bufferedCards.map((card, i) => {
+            const distance = i - index;
+            if (Math.abs(distance) > 5) return null;
 
             let scale = MID_SCALE;
-            if (i === 1 || i === 3) scale = SIDE_SCALE;
-            if (i === 0 || i === 4) scale = OUTER_SCALE;
-
-            const offset = distance * SLOT + dragX;
-
-            const blur =
-              Math.abs(distance) === 2
-                ? "blur(1.5px) drop-shadow(0 0 20px rgba(0,0,0,0.35))"
-                : "none";
+            if (Math.abs(distance) === 1) scale = SIDE_SCALE;
+            if (Math.abs(distance) === 2) scale = OUTER_SCALE;
 
             return (
               <div
-                key={card.title}
+                key={i}
                 style={{
                   position: "absolute",
                   left: "50%",
-                  transform: `translateX(${offset}px) translateX(-50%) scale(${scale})`,
-                  transition: dragging.current
-                    ? "none"
-                    : "transform 2200ms cubic-bezier(0.16, 1, 0.3, 1)",
+                  transform: `translateX(${
+                    distance * SLOT + dragX
+                  }px) translateX(-50%) scale(${scale})`,
+                  transition:
+                    dragging.current || snapping.current
+                      ? "none"
+                      : "transform 900ms cubic-bezier(0.16,1,0.3,1)",
                   zIndex: 10 - Math.abs(distance),
-                  filter: blur,
                 }}
               >
                 <Card data={card} />
@@ -176,7 +184,37 @@ export default function WorkHistory() {
         </div>
       </div>
 
-      <style>{css}</style>
+      {/* SHINY BUTTON CSS */}
+      <style>{`
+        .shiny-btn {
+          position: relative;
+          overflow: hidden;
+        }
+        .shiny-btn::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -150%;
+          width: 150%;
+          height: 100%;
+          background: linear-gradient(
+            110deg,
+            transparent 0%,
+            rgba(255,255,255,0.15) 40%,
+            rgba(255,255,255,0.45) 50%,
+            rgba(255,255,255,0.15) 60%,
+            transparent 100%
+          );
+          transform: skewX(-20deg);
+        }
+        .shiny-btn:hover::before {
+          animation: btn-shine 1.1s ease forwards;
+        }
+        @keyframes btn-shine {
+          from { left: -150%; }
+          to { left: 150%; }
+        }
+      `}</style>
     </section>
   );
 }
@@ -200,8 +238,15 @@ function Card({ data }) {
         </div>
       </div>
 
-      <img src={data.image} alt="" style={styles.image} />
-      <button style={styles.cta}>View Case Study</button>
+      <img src={data.image} alt="" style={styles.image} draggable={false} />
+
+      <button
+        style={styles.cta}
+        className="shiny-btn"
+        onClick={() => (window.location.href = data.link)}
+      >
+        View Case Study
+      </button>
     </div>
   );
 }
@@ -209,7 +254,7 @@ function Card({ data }) {
 /* ---------- STYLES ---------- */
 const styles = {
   section: {
-    padding: "32px 16px",
+    padding: "0px 4px", // ↓ vertical space
     display: "flex",
     justifyContent: "center",
   },
@@ -222,38 +267,17 @@ const styles = {
     padding: 56,
     overflow: "hidden",
   },
-
-  header: {
-    textAlign: "center",
-    marginBottom: 40,
-  },
-
-  heading: {
-    fontSize: 48,
-    margin: 0,
-  },
-
-  subheading: {
-    marginTop: 8,
-    fontSize: 16,
-    color: "#777",
-  },
-
+  header: { textAlign: "center", marginBottom: 40 },
+  heading: { fontSize: 48, margin: 0 },
+  subheading: { marginTop: 8, fontSize: 16, color: "#777" },
   row: {
     position: "relative",
     height: 720,
     cursor: "grab",
     touchAction: "pan-y",
+    userSelect: "none",
   },
-
-  swipeHint: {
-    marginTop: 8,
-    textAlign: "center",
-    fontSize: 12,
-    opacity: 0.5,
-    pointerEvents: "none",
-  },
-
+  swipeHint: { marginTop: 8, textAlign: "center", fontSize: 12, opacity: 0.5 },
   card: {
     width: 420,
     height: 750,
@@ -261,9 +285,7 @@ const styles = {
     borderRadius: 24,
     position: "relative",
     color: "#fff",
-    fontFamily: "Montserrat, sans-serif",
   },
-
   title: { position: "absolute", top: 60, left: 42, fontSize: 60 },
   subtitle: {
     position: "absolute",
@@ -280,11 +302,9 @@ const styles = {
     fontSize: 15,
     opacity: 0.5,
   },
-
   metaRow: { position: "absolute", top: 306, left: 42, display: "flex" },
   metaLabel: { display: "block", fontSize: 18, marginBottom: 12 },
   metaValue: { fontSize: 24 },
-
   image: {
     position: "absolute",
     top: 390,
@@ -294,7 +314,6 @@ const styles = {
     borderRadius: 24,
     objectFit: "cover",
   },
-
   cta: {
     position: "absolute",
     bottom: 30,
@@ -308,15 +327,3 @@ const styles = {
     fontSize: 21,
   },
 };
-
-const css = `
-@media (max-width: 640px) {
-  .wh-container {
-    padding: 28px 18px 24px;
-  }
-
-  .wh-header {
-    margin-bottom: 20px;
-  }
-}
-`;

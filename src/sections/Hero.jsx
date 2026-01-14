@@ -156,7 +156,14 @@ export default function Hero() {
             </h1>
 
             <div style={styles.actions}>
-              <button style={styles.primaryBtn}>Let’s talk</button>
+              <a
+                href="https://calendly.com/orbitsnevermeet/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: "none" }}
+              >
+                <button style={styles.primaryBtn}>Let’s talk</button>
+              </a>
 
               <a
                 href="/resume.pdf"

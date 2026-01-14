@@ -19,24 +19,28 @@ export default function Offer() {
 
             <h3 style={styles.cardTitle}>Project</h3>
             <p style={styles.cardDesc}>
-              I will structure and design your product.
+              I design clean, usable product interfaces for real users.
             </p>
 
-            <div style={styles.price}>€10,000</div>
-            <div style={styles.priceMeta}>net starting price</div>
+            <div style={styles.price}>₹1,50,000</div>
+            <div style={styles.priceMeta}>starting per project</div>
 
             <ul style={styles.list}>
               <li style={styles.listItem}>Freelance Consultant role</li>
               <li style={styles.listItem}>Flexible commitment</li>
               <li style={styles.listItem}>Remote</li>
               <li style={styles.listItem}>Europe/USA/Canada/SEA/Middle East</li>
-              <li style={styles.listItem}>
-                Not satisfied with the results? I will revise the design again,
-                no questions asked.
-              </li>
+              <li style={styles.listItem}>2–3 revision rounds included</li>
             </ul>
 
-            <button style={styles.darkButton}>Let’s talk →</button>
+            <a
+              href="https://calendly.com/orbitsnevermeet/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none", marginTop: "40px" }}
+            >
+              <button style={styles.darkButton}>Let’s talk →</button>
+            </a>
           </div>
 
           {/* FULL TIME */}
@@ -48,27 +52,34 @@ export default function Offer() {
 
             <h3 style={{ ...styles.cardTitle, color: "#fff" }}>Full-time</h3>
             <p style={styles.cardDescDark}>
-              I join your team as product design lead.
+              I join your team as a product designer.
             </p>
 
-            <div style={{ ...styles.price, color: "#fff" }}>€200,000</div>
-            <div style={styles.priceMetaDark}>gross per year</div>
+            <div style={{ ...styles.price, color: "#fff" }}>₹10,00,000</div>
+            <div style={styles.priceMetaDark}>CTC per year</div>
 
             <ul style={styles.listDark}>
               <li style={styles.listItemDark}>
-                Staff, Lead, or Founding Designer role
+                Product / UI / UX Designer role
               </li>
-              <li style={styles.listItemDark}>Minimum 1-year commitment</li>
+              <li style={styles.listItemDark}>
+                Early-stage or growth startups
+              </li>
               <li style={styles.listItemDark}>Remote or hybrid</li>
               <li style={styles.listItemDark}>
                 Europe/USA/Canada/SEA/Middle East
               </li>
-              <li style={styles.listItemDark}>
-                Contract can be cancelled before the full year.*
-              </li>
+              <li style={styles.listItemDark}>Long-term growth focused</li>
             </ul>
 
-            <button style={styles.lightButton}>Let’s talk →</button>
+            <a
+              href="https://calendly.com/orbitsnevermeet/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none", marginTop: "40px" }}
+            >
+              <button style={styles.lightButton}>Let’s talk →</button>
+            </a>
           </div>
         </div>
       </div>
@@ -228,7 +239,6 @@ const styles = {
   },
 
   darkButton: {
-    marginTop: "40px",
     padding: "14px 26px",
     borderRadius: "999px",
     border: "none",
@@ -236,11 +246,9 @@ const styles = {
     color: "#fff",
     fontSize: "14px",
     cursor: "pointer",
-    width: "fit-content",
   },
 
   lightButton: {
-    marginTop: "40px",
     padding: "14px 26px",
     borderRadius: "999px",
     border: "none",
@@ -248,7 +256,6 @@ const styles = {
     color: "#000",
     fontSize: "14px",
     cursor: "pointer",
-    width: "fit-content",
   },
 };
 

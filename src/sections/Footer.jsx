@@ -18,6 +18,15 @@ export default function Footer() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
+  const socials = [
+    { icon: linkedin, link: "https://www.linkedin.com/in/iamorbito/" },
+    { icon: xIcon, link: "https://x.com/iamorbito" },
+    { icon: dribbble, link: "https://dribbble.com/iamorbito" },
+    { icon: instagram, link: "https://www.instagram.com/iamorbito/" },
+    { icon: discord, link: "https://discord.gg/ws6FYcFwAF" },
+    { icon: behance, link: "https://www.behance.net/iamorbito" },
+  ];
+
   return (
     <section id="footer" style={styles.section}>
       <div
@@ -102,16 +111,21 @@ export default function Footer() {
                 overflowX: isMobile ? "auto" : "visible",
               }}
             >
-              {[linkedin, xIcon, dribbble, instagram, discord, behance].map(
-                (icon, i) => (
+              {socials.map((item, i) => (
+                <a
+                  key={i}
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <img
-                    key={i}
-                    src={icon}
+                    src={item.icon}
                     alt="social icon"
                     style={styles.iconImg}
+                    draggable={false}
                   />
-                )
-              )}
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -138,12 +152,8 @@ export default function Footer() {
         }
 
         @keyframes shine {
-          0% {
-            background-position: 0% 0%;
-          }
-          100% {
-            background-position: -250% 0%;
-          }
+          0% { background-position: 0% 0%; }
+          100% { background-position: -250% 0%; }
         }
       `}</style>
     </section>

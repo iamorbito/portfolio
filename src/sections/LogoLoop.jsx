@@ -13,18 +13,24 @@ const TOOLS = [
 export default function LogoLoop() {
   return (
     <section style={styles.section}>
-      <div style={styles.track}>
-        {[...TOOLS, ...TOOLS].map((tool, i) => (
-          <span key={i} style={styles.item}>
-            {tool}
-          </span>
-        ))}
+      <div style={styles.viewport}>
+        <div style={styles.track}>
+          {[...TOOLS, ...TOOLS].map((tool, i) => (
+            <span key={i} style={styles.item}>
+              {tool}
+            </span>
+          ))}
+        </div>
       </div>
 
       <style>{`
-        @keyframes logoLoop {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
+        @keyframes infiniteLoop {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-50%);
+          }
         }
       `}</style>
     </section>
@@ -35,25 +41,28 @@ export default function LogoLoop() {
 
 const styles = {
   section: {
-    width: "100vw", // 👈 full screen width
+    width: "100vw",
     overflow: "hidden",
     padding: "32px 0",
     margin: "64px 0",
     position: "relative",
     left: "50%",
-    right: "50%",
-    marginLeft: "-50vw", // 👈 break out of container
-    marginRight: "-50vw",
+    marginLeft: "-50vw",
+  },
+
+  viewport: {
+    width: "100%",
+    overflow: "hidden",
+    maskImage:
+      "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+    WebkitMaskImage:
+      "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
   },
 
   track: {
     display: "flex",
     width: "max-content",
-    animation: "logoLoop 14s linear infinite",
-    maskImage:
-      "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
-    WebkitMaskImage:
-      "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+    animation: "infiniteLoop 16s linear infinite",
   },
 
   item: {
