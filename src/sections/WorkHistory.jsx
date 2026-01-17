@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import myPic from "../assets/mypic.jpeg";
+import mod from "../assets/mod.png";
+import drum from "../assets/drumsynth.png";
+import goasis from "../assets/greenoasis.png";
+import vision from "../assets/vision.png";
 
 /* ---------- CONSTANTS ---------- */
 const MID_SCALE = 0.88;
@@ -21,40 +25,40 @@ const baseCards = [
     link: "https://example.com/blud",
   },
   {
-    title: "Stride",
+    title: "Vision",
     subtitle: "Campus Management System",
     desc: "Designed a scalable system for schools and colleges focusing on clarity, speed, and admin efficiency.",
     type: "Startup",
     time: "6 Months",
-    image: myPic,
-    link: "https://example.com/stride",
+    image: vision,
+    link: "https://www.behance.net/gallery/242258631/Vision-Clothing",
   },
   {
-    title: "Locsy",
+    title: "mod.music",
     subtitle: "Local Discovery App",
     desc: "A mobile-first product helping users explore nearby cafes, parks, and experiences through personalization.",
-    type: "Product",
-    time: "5 Months",
-    image: myPic,
-    link: "https://example.com/locsy",
+    type: "Individual",
+    time: "12 Hrs",
+    image: mod,
+    link: "https://www.behance.net/gallery/230845673/modmusic-replica-with-better-NavBar",
   },
   {
-    title: "LegalLens",
+    title: "Green Oasis",
     subtitle: "AI Legal Assistant",
     desc: "An AI-powered assistant for legal research, contracts, and case discovery in the Indian legal system.",
-    type: "AI Tool",
-    time: "4 Months",
-    image: myPic,
-    link: "https://example.com/legallens",
+    type: "Individual",
+    time: "24 Hrs",
+    image: goasis,
+    link: "https://www.behance.net/gallery/201696149/Green-Oasis-Brand-Identity",
   },
   {
-    title: "Touch Grass",
+    title: "drumsynth",
     subtitle: "Wellbeing Mobile App",
     desc: "A mindful intervention app encouraging users to disconnect, reflect, and rebalance screen time.",
     type: "Mobile App",
     time: "3 Months",
-    image: myPic,
-    link: "https://example.com/touchgrass",
+    image: drum,
+    link: "https://www.behance.net/gallery/230845919/drumsynth-landing-page",
   },
 ];
 
@@ -130,7 +134,7 @@ export default function WorkHistory() {
   };
 
   return (
-    <section style={styles.section}>
+    <section style={styles.section} id="work-history">
       <div style={styles.container}>
         <div style={styles.header}>
           <h2 style={styles.heading}>Projects</h2>
@@ -254,7 +258,7 @@ function Card({ data }) {
 /* ---------- STYLES ---------- */
 const styles = {
   section: {
-    padding: "0px 4px", // ↓ vertical space
+    padding: "16px 16px", // ↓ vertical space
     display: "flex",
     justifyContent: "center",
   },

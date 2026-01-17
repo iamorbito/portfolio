@@ -17,15 +17,30 @@ const NAV_ITEMS = [
 
 export default function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
 
-  /* 🔒 LOCK BODY SCROLL */
+  /* 🔒 LOCK BODY SCROLL — FIXED */
   useEffect(() => {
-    document.body.style.overflow = menuVisible ? "hidden" : "";
+    if (!menuOpen) {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      return;
+    }
+
+    const scrollY = window.scrollY;
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+
     return () => {
-      document.body.style.overflow = "";
+      const y = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, parseInt(y || "0") * -1);
     };
-  }, [menuVisible]);
+  }, [menuOpen]);
 
   return (
     <section style={styles.section} id="home">
@@ -40,10 +55,7 @@ export default function Hero() {
 
             <button
               aria-label="Open menu"
-              onClick={() => {
-                setMenuVisible(true);
-                requestAnimationFrame(() => setMenuOpen(true));
-              }}
+              onClick={() => setMenuOpen(true)}
               style={styles.hamburger}
             >
               ☰
@@ -51,23 +63,17 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* FULLSCREEN MENU (ALWAYS MOUNTED → NO BLINK) */}
+        {/* FULLSCREEN MENU */}
         <div
           style={{
             ...styles.mobileMenu,
             opacity: menuOpen ? 1 : 0,
             transform: menuOpen ? "translateY(0)" : "translateY(16px)",
-            visibility: menuVisible ? "visible" : "hidden",
-            pointerEvents: menuVisible ? "auto" : "none",
+            visibility: menuOpen ? "visible" : "hidden",
+            pointerEvents: menuOpen ? "auto" : "none",
           }}
         >
-          <button
-            onClick={() => {
-              setMenuOpen(false);
-              setTimeout(() => setMenuVisible(false), 350);
-            }}
-            style={styles.closeBtn}
-          >
+          <button onClick={() => setMenuOpen(false)} style={styles.closeBtn}>
             Close ✕
           </button>
 
@@ -78,10 +84,7 @@ export default function Hero() {
                   href={item.href}
                   target={item.external ? "_blank" : undefined}
                   rel={item.external ? "noopener noreferrer" : undefined}
-                  onClick={() => {
-                    setMenuOpen(false);
-                    setTimeout(() => setMenuVisible(false), 350);
-                  }}
+                  onClick={() => setMenuOpen(false)}
                   style={styles.mobileLink}
                 >
                   {item.label}
