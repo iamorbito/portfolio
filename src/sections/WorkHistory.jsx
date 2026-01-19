@@ -4,6 +4,7 @@ import mod from "../assets/mod.png";
 import drum from "../assets/drumsynth.png";
 import goasis from "../assets/greenoasis.png";
 import vision from "../assets/vision.png";
+import blud from "../assets/blud.png";
 
 /* ---------- CONSTANTS ---------- */
 const MID_SCALE = 0.88;
@@ -17,26 +18,26 @@ const TRANSITION_MS = 900;
 const baseCards = [
   {
     title: "Blud",
-    subtitle: "Blood Donation Website",
-    desc: "With user-centered approach, the goal was to create an intuitive interface for effortless fund management within an MNC.",
+    subtitle: "Donate Blood. Save Lives.",
+    desc: "Connects donors and patients quickly through a simple, reliable platform.",
     type: "Individual",
-    time: "4 Months",
-    image: myPic,
+    time: "2 Months",
+    image: blud,
     link: "https://example.com/blud",
   },
   {
     title: "Vision",
-    subtitle: "Campus Management System",
-    desc: "Designed a scalable system for schools and colleges focusing on clarity, speed, and admin efficiency.",
-    type: "Startup",
-    time: "6 Months",
+    subtitle: "Fashion That Moves Fast",
+    desc: "An online clothing store with curated trends and smooth checkout.",
+    type: "Individual",
+    time: "12 Hrs",
     image: vision,
     link: "https://www.behance.net/gallery/242258631/Vision-Clothing",
   },
   {
     title: "mod.music",
-    subtitle: "Local Discovery App",
-    desc: "A mobile-first product helping users explore nearby cafes, parks, and experiences through personalization.",
+    subtitle: "Find Live Music",
+    desc: "Discover nearby concerts, artists, and upcoming live music events.",
     type: "Individual",
     time: "12 Hrs",
     image: mod,
@@ -44,8 +45,8 @@ const baseCards = [
   },
   {
     title: "Green Oasis",
-    subtitle: "AI Legal Assistant",
-    desc: "An AI-powered assistant for legal research, contracts, and case discovery in the Indian legal system.",
+    subtitle: "Fresh. Local. Honest.",
+    desc: "Farm-fresh ingredients served directly from local growers to your table.",
     type: "Individual",
     time: "24 Hrs",
     image: goasis,
@@ -53,10 +54,10 @@ const baseCards = [
   },
   {
     title: "drumsynth",
-    subtitle: "Wellbeing Mobile App",
-    desc: "A mindful intervention app encouraging users to disconnect, reflect, and rebalance screen time.",
-    type: "Mobile App",
-    time: "3 Months",
+    subtitle: "Mix Music Online",
+    desc: "Create, mix, and play tracks like a DJ, straight from your browser.",
+    type: "Individual",
+    time: "12 Hrs",
     image: drum,
     link: "https://www.behance.net/gallery/230845919/drumsynth-landing-page",
   },
