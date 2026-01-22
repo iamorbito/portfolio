@@ -318,6 +318,7 @@ const styles = {
     height: 224,
     borderRadius: 24,
     objectFit: "cover",
+    // border: "1px solid #5c5c5c",
   },
   cta: {
     position: "absolute",
