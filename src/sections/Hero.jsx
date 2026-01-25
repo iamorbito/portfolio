@@ -65,6 +65,7 @@ export default function Hero() {
 
         {/* FULLSCREEN MENU */}
         <div
+          className="mobile-menu"
           style={{
             ...styles.mobileMenu,
             opacity: menuOpen ? 1 : 0,
@@ -201,6 +202,18 @@ export default function Hero() {
             margin: 0 !important;
           }
         }
+
+        /* hide scrollbar for the mobile fullscreen menu but keep it scrollable */
+        .mobile-menu {
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE 10+ */
+        }
+
+        .mobile-menu::-webkit-scrollbar {
+          display: none; /* Safari and Chrome */
+        }
       `}</style>
     </section>
   );
@@ -268,6 +281,10 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     transition: "opacity 0.35s ease, transform 0.35s ease",
+    overflowY: "auto",
+    WebkitOverflowScrolling: "touch",
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
   },
 
   closeBtn: {

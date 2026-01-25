@@ -80,11 +80,28 @@ export default function WorkHistory() {
   const dragging = useRef(false);
   const startX = useRef(0);
   const autoRef = useRef(null);
+  const restartRef = useRef(null);
   const snapping = useRef(false);
+  const wheelLock = useRef(false);
+  const rowRef = useRef(null);
+
+  const startAuto = () => {
+    clearInterval(autoRef.current);
+    autoRef.current = setInterval(() => move(1), AUTO_DELAY);
+  };
+
+  const restartAutoLater = () => {
+    clearInterval(autoRef.current);
+    clearTimeout(restartRef.current);
+    restartRef.current = setTimeout(startAuto, AUTO_DELAY);
+  };
 
   useEffect(() => {
-    autoRef.current = setInterval(() => move(1), AUTO_DELAY);
-    return () => clearInterval(autoRef.current);
+    startAuto();
+    return () => {
+      clearInterval(autoRef.current);
+      clearTimeout(restartRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -131,8 +148,50 @@ export default function WorkHistory() {
     if (dragX > SLOT / 4) move(-1);
 
     setDragX(0);
-    autoRef.current = setInterval(() => move(1), AUTO_DELAY);
+    restartAutoLater();
   };
+
+  const onWheel = (e) => {
+    if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    if (wheelLock.current) return;
+
+    wheelLock.current = true;
+    clearInterval(autoRef.current);
+
+    if (e.deltaX > 0) move(1);
+    if (e.deltaX < 0) move(-1);
+
+    setTimeout(() => {
+      wheelLock.current = false;
+      restartAutoLater();
+    }, TRANSITION_MS);
+  };
+
+  useEffect(() => {
+    const rawWheel = (e) => {
+      const el = rowRef.current;
+      if (!el) return;
+      // If the event originated inside the carousel and is predominantly horizontal,
+      // prevent default to stop browser back/forward navigation.
+      if (el.contains(e.target) && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("wheel", rawWheel, {
+      passive: false,
+      capture: true,
+    });
+    return () =>
+      document.removeEventListener("wheel", rawWheel, { capture: true });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (restartRef.current) clearTimeout(restartRef.current);
+    };
+  }, []);
 
   return (
     <section style={styles.section} id="work-history">
@@ -146,6 +205,8 @@ export default function WorkHistory() {
 
         <div
           style={styles.row}
+          ref={rowRef}
+          onWheel={onWheel}
           onMouseDown={onDown}
           onMouseMove={onMove}
           onMouseUp={onUp}
@@ -219,7 +280,17 @@ export default function WorkHistory() {
           from { left: -150%; }
           to { left: 150%; }
         }
-      `}</style>
+          @media (max-width: 600px) {
+#work-history > div {
+padding: 40px 20px 44px;
+}
+}
+@media (max-width: 600px) {
+#work-history > div {
+padding: 40px 20px 44px;
+}
+}
+`}</style>
     </section>
   );
 }
@@ -259,18 +330,21 @@ function Card({ data }) {
 /* ---------- STYLES ---------- */
 const styles = {
   section: {
-    padding: "16px 16px", // ↓ vertical space
-    display: "flex",
-    justifyContent: "center",
+    margin: "48px 0",
+    padding: "0 16px",
+    boxSizing: "border-box",
+    overscrollBehavior: "none",
   },
 
   container: {
     maxWidth: 1400,
+    margin: "0 auto",
     width: "100%",
     background: "#f4f4f5",
     borderRadius: 32,
-    padding: 56,
+    padding: "72px 56px",
     overflow: "hidden",
+    border: "6px solid #f2f2f5",
   },
   header: { textAlign: "center", marginBottom: 40 },
   heading: { fontSize: 48, margin: 0 },
@@ -280,6 +354,7 @@ const styles = {
     height: 720,
     cursor: "grab",
     touchAction: "pan-y",
+    overscrollBehaviorX: "none",
     userSelect: "none",
   },
   swipeHint: { marginTop: 8, textAlign: "center", fontSize: 12, opacity: 0.5 },
