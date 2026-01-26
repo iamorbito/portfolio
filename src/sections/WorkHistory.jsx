@@ -23,7 +23,7 @@ const baseCards = [
     type: "Individual",
     time: "2 Months",
     image: blud,
-    link: "https://example.com/blud",
+    link: "https://www.figma.com/design/biLMCbu5sWBdgaTXjFXzkf/Competitions?node-id=44-90&t=Eebv1fCNkpvQ1JNf-1",
   },
   {
     title: "Vision",
