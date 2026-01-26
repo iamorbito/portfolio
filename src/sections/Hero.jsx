@@ -42,6 +42,33 @@ export default function Hero() {
     };
   }, [menuOpen]);
 
+  // handle navigation for mobile menu items
+  const handleNavClick = (e, item) => {
+    // external links: allow default behavior but close the menu
+    if (item.external) {
+      setMenuOpen(false);
+      return;
+    }
+
+    // internal hash links: prevent default and handle smooth scroll after menu closes
+    e.preventDefault();
+    setMenuOpen(false);
+
+    // small delay to allow body scroll lock to be released, then scroll to the target
+    setTimeout(() => {
+      try {
+        const el = document.querySelector(item.href);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          window.location.hash = item.href;
+        }
+      } catch (err) {
+        // no-op
+      }
+    }, 50);
+  };
+
   return (
     <section style={styles.section} id="home">
       <div style={styles.box} className="hero-box">
@@ -85,7 +112,7 @@ export default function Hero() {
                   href={item.href}
                   target={item.external ? "_blank" : undefined}
                   rel={item.external ? "noopener noreferrer" : undefined}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={(e) => handleNavClick(e, item)}
                   style={styles.mobileLink}
                 >
                   {item.label}

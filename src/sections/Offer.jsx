@@ -127,6 +127,8 @@ const styles = {
     gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
     gap: "64px",
     alignItems: "stretch",
+    justifyContent: "center",
+    justifyItems: "center",
   },
 
   card: {
@@ -135,6 +137,9 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     minHeight: "640px",
+    width: "100%",
+    maxWidth: "680px",
+    boxSizing: "border-box",
   },
 
   lightCard: {
