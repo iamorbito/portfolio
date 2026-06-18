@@ -22,7 +22,7 @@ export default function Offer() {
               I design clean, usable product interfaces for real users.
             </p>
 
-            <div style={styles.price}>₹15,000</div>
+            <div style={styles.price}>₹25,000</div>
             <div style={styles.priceMeta}>starting per project</div>
 
             <ul style={styles.list}>
@@ -55,7 +55,7 @@ export default function Offer() {
               I join your team as a product designer.
             </p>
 
-            <div style={{ ...styles.price, color: "#fff" }}>₹3,00,000</div>
+            <div style={{ ...styles.price, color: "#fff" }}>₹5,00,000</div>
             <div style={styles.priceMetaDark}>CTC per year</div>
 
             <ul style={styles.listDark}>
